@@ -1,4 +1,3 @@
-# Example data
 sales_data = [
     {"day": 1, "product_a": 202, "product_b": 142, "product_c": 164},
     {"day": 2, "product_a": 206, "product_b": 121, "product_c": 338},
@@ -23,28 +22,72 @@ sales_data = [
 ]
 
 def total_sales_by_product(data, product_key):
-    """Calculates the total sales of a specific product in 30 days."""
-    pass
+    total_producto = sum(day.get(product_key,0) for day in data)
+    return total_producto
+
+total_productoA = total_sales_by_product(sales_data,'product_a')
+total_productoB = total_sales_by_product(sales_data,'product_b')
+total_productoC = total_sales_by_product(sales_data,'product_c')
+
+print('Total de productos A:', total_productoA)
+print('Total de productos B:', total_productoB)
+print('Total de productos C:', total_productoC)
+
 
 
 def average_daily_sales(data, product_key):
-    """Calculates the average daily sales of a specific product."""
-    pass
+    total_producto = sum(day.get(product_key,0) for day in data)
+    days = len(data)
+    if days == 0:
+        return 0
+    return total_producto / days
+
+
 
 
 def best_selling_day(data):
-    """Finds the day with the highest total sales."""
-    pass
+    if not data:
+        return None
+    best_day = data[0]['day']
+    maximo_total = sum(value for key, value in data[0].items() if key != 'day')
+    for day in data:
+        total_dia = sum(value for key, value in day.items() if key != 'day')
+        if total_dia > maximo_total:
+            maximo_total = total_dia
+            best_day = day['day']
+    return best_day, maximo_total
+
 
 
 def days_above_threshold(data, product_key, threshold):
-    """Counts how many days the sales of a product exceeded a given threshold."""
-    pass
+    count = 0
+    for day in data:
+        if day.get(product_key, 0) > threshold:
+            count += 1
+    return count
+
+dias_c = days_above_threshold(sales_data, "product_c", 300)
+
+print("Días con Product C por encima de 300:", dias_c)
+   
+
 
 
 def top_product(data):
-    """Determines which product had the highest total sales in 30 days."""
-    pass
+    if not data:
+        return None
+
+    totals = {} 
+
+    for day in data:
+        for key, value in day.items():
+            if key != "day":  # Ignorar la clave 'day'
+                totals[key] = totals.get(key, 0) + value
+
+    best_product = max(totals, key=totals.get)
+    return best_product, totals[best_product]
+
+   
 
 
 
